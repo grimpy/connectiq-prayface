@@ -30,11 +30,11 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
     function initialize() {
         WatchFace.initialize();
         calculator = new SalahCalculator();
-        calculator.setCalcMethod(5);
+        calculator.setCalcMethod(3);
         is_awake = true;
         times = [0, 0, 0, 0, 0, 0, 0];
         // we default location close to developers home
-        location = [30.008518, 30.982032];
+        location = [51.06717, 3.990];
         updateTimes();
     }
 
@@ -176,7 +176,7 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
         dc.drawArc(144, 31, 30, Graphics.ARC_COUNTER_CLOCKWISE, 90, destarc);
         var font = WatchUi.loadResource( Rez.Fonts.icons );
         // step icon
-        dc.drawText(40, 5, font, "B", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(40, 5, font, "s", Graphics.TEXT_JUSTIFY_CENTER);
         // battery icon
         dc.drawText(15, 35, font, "T", Graphics.TEXT_JUSTIFY_CENTER);
         // notification icon
