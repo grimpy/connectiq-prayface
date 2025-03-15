@@ -25,6 +25,10 @@ class connectiqprayfaceApp extends Application.AppBase {
     function onSettingsChanged() as Void {
         WatchUi.requestUpdate();
     }
+    
+    function getSettingsView() {
+        return [new Rez.Menus.MainMenu(),new SettingsMenuDelegate()];
+    }   
 
 }
 

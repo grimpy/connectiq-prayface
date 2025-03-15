@@ -1,25 +1,30 @@
 <settings>
 
-    <setting propertyKey="@Properties.BackgroundColor" title="@Strings.BackgroundColorTitle">
+    <setting propertyKey="@Properties.calculationMethod" title="@Strings.setting_method">
         <settingConfig type="list">
-            <listEntry value="0x000000">@Strings.ColorBlack</listEntry>
-            <listEntry value="0x555555">@Strings.ColorDarkGray</listEntry>
-            <listEntry value="0xAAAAAA">@Strings.ColorLightGray</listEntry>
-            <listEntry value="0xFFFFFF">@Strings.ColorWhite</listEntry>
+            <listEntry value="0">@Strings.method_jafari</listEntry>
+            <listEntry value="1">@Strings.method_karachi</listEntry>
+            <listEntry value="2">@Strings.method_isna</listEntry>
+            <listEntry value="3">@Strings.method_mwl</listEntry>
+            <listEntry value="4">@Strings.method_makkah</listEntry>
+            <listEntry value="5">@Strings.method_egypt</listEntry>
         </settingConfig>
     </setting>
 
-    <setting propertyKey="@Properties.ForegroundColor" title="@Strings.ForegroundColorTitle">
+    <setting propertyKey="@Properties.juristicMethod" title="@Strings.setting_juristic">
         <settingConfig type="list">
-            <listEntry value="0x000000">@Strings.ColorBlack</listEntry>
-            <listEntry value="0x0000FF">@Strings.ColorBlue</listEntry>
-            <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
-            <listEntry value="0xFFFFFF">@Strings.ColorWhite</listEntry>
+            <listEntry value="0">@Strings.juristic_shafii</listEntry>
+            <listEntry value="1">@Strings.juristic_hanafi</listEntry>
         </settingConfig>
     </setting>
 
-    <setting propertyKey="@Properties.UseMilitaryFormat" title="@Strings.MilitaryFormatTitle">
-        <settingConfig type="boolean" />
+    <setting propertyKey="@Properties.latitudeMethod" title="@Strings.setting_latitude">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.latitude_none</listEntry>
+            <listEntry value="1">@Strings.latitude_midnight</listEntry>
+            <listEntry value="2">@Strings.latitude_oneseventh</listEntry>
+            <listEntry value="3">@Strings.latitude_anglebased</listEntry>
+        </settingConfig>
     </setting>
 
 </settings>

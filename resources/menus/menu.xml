@@ -1,0 +1,41 @@
+<menus>
+    <menu2 id="MainMenu" title="Main">
+        <menu-item id="item_setting_method" label="@Strings.setting_method" />
+        <menu-item
+            id="item_setting_juristic"
+            label="@Strings.setting_juristic"
+        />
+        <menu-item
+            id="item_setting_latitude"
+            label="@Strings.setting_latitude"
+        />
+    </menu2>
+    <menu2 id="MethodMenu" title="Method">
+        <menu-item id="item_method_jafari" label="@Strings.method_jafari" />
+        <menu-item id="item_method_karachi" label="@Strings.method_karachi" />
+        <menu-item id="item_method_isna" label="@Strings.method_isna" />
+        <menu-item id="item_method_mwl" label="@Strings.method_mwl" />
+        <menu-item id="item_method_makkah" label="@Strings.method_makkah" />
+        <menu-item id="item_method_egypt" label="@Strings.method_egypt" />
+        <menu-item id="item_method_tehran" label="@Strings.method_tehran" />
+    </menu2>
+    <menu2 id="JuristicMenu" title="Juristic">
+        <menu-item id="item_juristic_shafii" label="@Strings.juristic_shafii" />
+        <menu-item id="item_juristic_hanafi" label="@Strings.juristic_hanafi" />
+    </menu2>
+    <menu2 id="LatitudeMenu" title="Latititude">
+        <menu-item id="item_latitude_none" label="@Strings.latitude_none" />
+        <menu-item
+            id="item_latitude_midnight"
+            label="@Strings.latitude_midnight"
+        />
+        <menu-item
+            id="item_latitude_oneseventh"
+            label="@Strings.latitude_oneseventh"
+        />
+        <menu-item
+            id="item_latitude_anglebased"
+            label="@Strings.latitude_anglebased"
+        />
+    </menu2>
+</menus>

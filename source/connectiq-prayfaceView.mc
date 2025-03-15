@@ -30,7 +30,6 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
     function initialize() {
         WatchFace.initialize();
         calculator = new SalahCalculator();
-        calculator.setCalcMethod(5);
         is_awake = true;
         times = [0, 0, 0, 0, 0, 0, 0];
         // we default location close to developers home
@@ -39,6 +38,16 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
     }
 
     function updateTimes() {
+        // set settings
+        var method = Application.Properties.getValue("calculationMethod");
+        calculator.setCalcMethod(method);
+        var juristic = Application.Properties.getValue("juristicMethod");
+        calculator.setAsrJuristic(juristic);
+        var latitude_method = Application.Properties.getValue("latitudeMethod");
+        calculator.setAdjustHighLats(latitude_method);
+        System.println("Method: " + method + " Jursitic: " + juristic + " Adjust: " + latitude_method);
+
+        // set posititions
         var position = Position.getInfo().position;
         var coordinates = position.toDegrees();
         System.println("Long: " + coordinates[0] + " Lan: " + coordinates[1]);
@@ -110,6 +119,7 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
 
         // load views
         var clockView = View.findDrawableById("TimeLabel") as Text;
+        var statusView = View.findDrawableById("status") as Text;
         var dateView = View.findDrawableById("Date") as Text;
         var dayView = View.findDrawableById("Day") as Text;
         var secondsView = View.findDrawableById("TimeSeconds") as Text;
@@ -134,8 +144,13 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
         var today = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
         dateView.setText(today.day.toString());
         dayView.setText(today.day_of_week);
-        // Update notificationsView count
-        notificationsView.setText(devsettings.notificationCount.toString());
+        if (devsettings.phoneConnected) {
+            notificationsView.setText(devsettings.notificationCount.toString()); 
+        }
+        // Set DND
+        if (devsettings.doNotDisturb) {
+            statusView.setText("Zzz"); 
+        }
         // Update batery text
         batteryView.setText(stats.battery.format("%02d") + "%");
         // Pray times

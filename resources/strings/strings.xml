@@ -13,4 +13,25 @@
     <string id="ColorBlue">Blue</string>
     <string id="ColorRed">Red</string>
 
+    <string id="setting_method">Prayer Method</string>
+    <string id="setting_juristic">Juristic Method</string>
+    <string id="setting_latitude">Latitude Compensation</string>
+
+    <string id="method_jafari">Ithna Ashari</string>
+    <string id="method_karachi">University of Islamic Sciences, Karachi</string>
+    <string id="method_isna">Isalamic Society of North America (ISNA)</string>
+    <string id="method_mwl">Muslim World League (MWL)</string>
+    <string id="method_makkah">Umm al-Qura, Makkah</string>
+    <string id="method_egypt">Egyptian General Authority of Survery</string>
+    <string
+        id="method_tehran"
+    >Insititue of Geophysics, University of Tehran</string>
+
+    <string id="juristic_shafii">Safii</string>
+    <string id="juristic_hanafi">Hanafi</string>
+
+    <string id="latitude_none">None</string>
+    <string id="latitude_midnight">Midnight</string>
+    <string id="latitude_oneseventh">One Seventh</string>
+    <string id="latitude_anglebased">Angle Based</string>
 </strings>
