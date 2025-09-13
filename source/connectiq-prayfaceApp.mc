@@ -17,17 +17,30 @@ class connectiqprayfaceApp extends Application.AppBase {
     }
 
     // Return the initial view of your application here
-    function getInitialView() as Array<Views or InputDelegates>? {
-        return [ new connectiqprayfaceView() ] as Array<Views or InputDelegates>;
+    function getInitialView() {
+        return [new connectiqprayfaceView()];
     }
 
     // New app settings have been received so trigger a UI update
     function onSettingsChanged() as Void {
         WatchUi.requestUpdate();
     }
+
+    // set method sublabel
+    function _setSubLabel(mainmenu, submenu, setting_name, index) {
+        var setting = Application.Properties.getValue(setting_name);
+        var menuitem = mainmenu.getItem(index);
+        var subitem = submenu.getItem(setting);
+        menuitem.setSubLabel(subitem.getLabel());
+    }
     
     function getSettingsView() {
-        return [new Rez.Menus.MainMenu(),new SettingsMenuDelegate()];
+        var mainmenu = new Rez.Menus.MainMenu();
+        _setSubLabel(mainmenu, new Rez.Menus.MethodMenu(), "calculationMethod", 0);
+        _setSubLabel(mainmenu, new Rez.Menus.JuristicMenu(), "juristicMethod", 1);
+        _setSubLabel(mainmenu, new Rez.Menus.LatitudeMenu(), "latitudeMethod", 2);
+
+        return [mainmenu, new SettingsMenuDelegate()];
     }   
 
 }

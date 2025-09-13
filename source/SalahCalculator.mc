@@ -5,7 +5,7 @@
 //Copyright (C) 2007-2010 PrayTimes.org
 //
 //Monkey-C Code By: Spencer Bruce
-//Original JS Code By: Hamid Zarrabi-Zadeh
+//Original JS Code By: Hamid Zarrabi-Zadehh
 
 //License: GNU LGPL v3.0
 //
@@ -28,6 +28,23 @@ using Toybox.Time.Gregorian;
 using Toybox.Lang;
 
 module IslamicCalendarModule {
+    const M_JAFARI = 0; // Ithna Ashari
+    const M_KARACHI = 1; // University of Islamic Sciences, Karachi
+    const M_ISNA = 2; // Islamic Society of North America
+    const M_MWL = 3; // Muslim World League
+    const M_MAKKAH = 4; // Umm al-Qura, Makkah
+    const M_EGYPT = 5; // Egyptian General Authority of Survey
+    const M_TEHRAN = 6; // Institute of Geophysics, Univ. of Tehran
+    const M_CUSTOM = 7; // Custom
+    
+    const ASR_SHAFII = 0; // factor = 1
+    const ASR_HANAFI = 1; // factor = 2
+    
+    const HL_NONE = 0; // no high-latitude adjustment
+    const HL_MIDNIGHT = 1; // middle of night
+    const HL_ONE7TH = 2; // 1/7 of night
+    const HL_ANGLE60TH = 3; // angle/60 of night
+
 	class SalahCalculator {
 
     // ---------------------- Global Variables --------------------
@@ -39,34 +56,8 @@ module IslamicCalendarModule {
     hidden var lng; // longitude
     hidden var timeZone; // time-zone
     hidden var JDate; // Julian date
-    // ------------------------------------------------------------
-    // Calculation Methods
-    hidden var Jafari; // Ithna Ashari
-    hidden var Karachi; // University of Islamic Sciences, Karachi
-    hidden var ISNA; // Islamic Society of North America (ISNA)
-    hidden var MWL; // Muslim World League (MWL)
-    hidden var Makkah; // Umm al-Qura, Makkah
-    hidden var Egypt; // Egyptian General Authority of Survey
-    hidden var Custom; // Custom Setting
-    hidden var Tehran; // Institute of Geophysics, University of Tehran
-    // Juristic Methods
-    hidden var Shafii; // Shafii (standard)
-    hidden var Hanafi; // Hanafi
-    // Adjusting Methods for Higher Latitudes
-    hidden var None; // No adjustment
-    hidden var MidNight; // middle of night
-    hidden var OneSeventh; // 1/7th of night
-    hidden var AngleBased; // angle/60th of night
-    // Time Formats
-    hidden var Time24; // 24-hour format
-    hidden var Time12; // 12-hour format
-    hidden var Time12NS; // 12-hour format with no suffix
-    hidden var Floating; // floating point number
-    // Time Names
-    hidden var timeNames;
-    hidden var InvalidTime; // The string used for invalid times
     // --------------------- Technical Settings --------------------
-    hidden var numIterations; // number of iterations needed to compute times
+    const numIterations = 1; // number of iterations needed to compute times
     // ------------------- Calc Method Parameters --------------------
     hidden var methodParams;
 
@@ -86,51 +77,9 @@ module IslamicCalendarModule {
 
         setCalcMethod(0);
         setAsrJuristic(0);
-        setDhuhrMinutes(0);
+        self.dhuhrMinutes = 0;
         setAdjustHighLats(1);
 
-        // Calculation Methods
-        setJafari(0); // Ithna Ashari
-        setKarachi(1); // University of Islamic Sciences, Karachi
-        setISNA(2); // Islamic Society of North America (ISNA)
-        setMWL(3); // Muslim World League (MWL)
-        setMakkah(4); // Umm al-Qura, Makkah
-        setEgypt(5); // Egyptian General Authority of Survey
-        setTehran(6); // Institute of Geophysics, University of Tehran
-        setCustom(7); // Custom Setting
-
-        // Juristic Methods
-        setShafii(0); // Shafii (standard)
-        setHanafi(1); // Hanafi
-
-        // Adjusting Methods for Higher Latitudes
-        setNone(0); // No adjustment
-        setMidNight(1); // middle of night
-        setOneSeventh(2); // 1/7th of night
-        setAngleBased(3); // angle/60th of night
-
-        // Time Formats
-        setTime24(0); // 24-hour format
-        setTime12(1); // 12-hour format
-        setTime12NS(2); // 12-hour format with no suffix
-        setFloating(3); // floating point number
-
-        // Time Names
-   //     timeNames = new ArrayList<String>();
-   //     timeNames.add("Fajr");
-   //     timeNames.add("Sunrise");
-   //     timeNames.add("Dhuhr");
-   //     timeNames.add("Asr");
-   //     timeNames.add("Sunset");
-   //     timeNames.add("Maghrib");
-   //     timeNames.add("Isha");
-
-        InvalidTime = "-----"; // The string used for invalid times
-
-        // --------------------- Technical Settings --------------------
-
-        setNumIterations(1); // number of iterations needed to compute
-        // times
 
         // ------------------- Calc Method Parameters --------------------
 
@@ -144,46 +93,23 @@ module IslamicCalendarModule {
         offsets[5] = 0;
         offsets[6] = 0;
 
-  //      /*
-   //      *
-   //      * fa : fajr angle ms : maghrib selector (0 = angle; 1 = minutes after
-   //      * sunset) mv : maghrib parameter value (in angle or minutes) is : isha
-   //      * selector (0 = angle; 1 = minutes after maghrib) iv : isha parameter
-   //      * value (in angle or minutes)
-   //      */
-        methodParams = {};
-
-        // Jafari
-        var Jvalues = [16d,0d,4d,0d,14d];
-        methodParams[getJafari().toNumber()] =  Jvalues;
-
-        // Karachi
-        var Kvalues = [18d,1d,0d,0d,18d];
-        methodParams[getKarachi().toNumber()]= Kvalues;
-
-        // ISNA
-        var Ivalues = [15d,1d,0d,0d,15d];
-        methodParams[getISNA().toNumber()]= Ivalues;
-
-        // MWL
-        var MWvalues = [18d,1d,0d,0d,17d];
-        methodParams[getMWL().toNumber()]= MWvalues;
-
-        // Makkah
-        var MKvalues = [18.5d,1d,0d,1d,90d];
-        methodParams[getMakkah().toNumber()]= MKvalues;
-
-        // Egypt
-        var Evalues = [19.5d,1d,0d,0d,17.5d];
-        methodParams[getEgypt().toNumber()]= Evalues;
-
-        // Tehran
-        var Tvalues = [17.7d,0d,4.5d,0d,14d];
-        methodParams[getTehran().toNumber()]= Tvalues;
-
-        // Custom
-        var Cvalues = [18d,1d,0d,0d,17d];
-        methodParams[getCustom().toNumber()]= Cvalues;
+        /*
+        * fajr angle 
+        * maghrib selector (0 = angle; 1 = minutes after sunset) 
+        * maghrib parameter value (in angle or minutes) 
+        * isha selector (0 = angle; 1 = minutes after maghrib 
+        * isha parameter value (in angle or minutes)
+        */
+        methodParams = {
+          M_JAFARI =>  [16d,   0d,   4d, 0d,   14d],
+          M_KARACHI => [18d,   1d,   0d, 0d,   18d],
+          M_ISNA =>    [15d,   1d,   0d, 0d,   15d],
+          M_MWL =>     [18d,   1d,   0d, 0d,   17d],
+          M_MAKKAH =>  [18.5d, 1d,   0d, 1d,   90d],
+          M_EGYPT =>   [19.5d, 1d,   0d, 0d, 17.5d],
+          M_TEHRAN =>  [17.7d, 0d, 4.5d, 0d,   14d],
+          M_CUSTOM =>  [18d,   1d,   0d, 0d,   17d],
+        };
 
     }
 
@@ -265,17 +191,17 @@ module IslamicCalendarModule {
 
     // compute mid-day (Dhuhr, Zawal) time
     hidden function computeMidDay(t) {
-        var T = equationOfTime(getJDate() + t);
+        var T = equationOfTime(JDate + t);
         var Z = Maths.fixhour(12 - T);
         return Z;
     }
 
     // compute time for a given angle G
     hidden function computeTime(G, t) {
-        var D = sunDeclination(getJDate() + t);
+        var D = sunDeclination(JDate + t);
         var Z = computeMidDay(t);
-        var Beg = -Maths.dsin(G) - Maths.dsin(D) * Maths.dsin(getLat());
-        var Mid = Maths.dcos(D) * Maths.dcos(getLat());
+        var Beg = -Maths.dsin(G) - Maths.dsin(D) * Maths.dsin(lat);
+        var Mid = Maths.dcos(D) * Maths.dcos(lat);
         var V = Maths.darccos(Beg/Mid)/15.0;
         return Z + (G > 90 ? -V : V);
     }
@@ -283,8 +209,8 @@ module IslamicCalendarModule {
     // compute the time of Asr
     // Shafii: step=1, Hanafi: step=2
     hidden function computeAsr(step, t) {
-        var D = sunDeclination(getJDate() + t);
-        var G = -Maths.darccot(step + Maths.dtan((getLat() - D).abs()));
+        var D = sunDeclination(JDate + t);
+        var G = -Maths.darccot(step + Maths.dtan((lat - D).abs()));
         return computeTime(G, t);
     }
 
@@ -298,12 +224,12 @@ module IslamicCalendarModule {
     // return prayer times for a given date
     hidden function getDatePrayerTimes(year, month, day,
             latitude, longitude, tZone) {
-        setLat(latitude);
-        setLng(longitude);
-        setTimeZone(tZone);
-        setJDate(julianDate(year, month, day));
+        self.lat = latitude;
+        self.lng = longitude;
+        self.timeZone = tZone;
+        self.JDate = julianDate(year, month, day);
         var lonDiff = longitude / (15.0d * 24.0d);
-        setJDate(getJDate() - lonDiff);
+        self.JDate -= lonDiff;
         return computeDayTimes();
     }
 
@@ -323,50 +249,13 @@ module IslamicCalendarModule {
 
     // set custom values for calculation parameters
     function setCustomParams(params) {
-
         for (var i = 0; i < 5; i++) {
             if (params[i] == -1) {
-                params[i] = methodParams[getCalcMethod()][i];
-                methodParams[getCustom()] = params;
-            } else {
-                methodParams[getCustom()][i] = params[i];
+                params[i] = methodParams[calcMethod][i];
             }
+            methodParams[M_CUSTOM][i] = params[i];
         }
-        setCalcMethod(getCustom());
-    }
-
-    // set the angle for calculating Fajr
-    function setFajrAngle(angle) {
-        var params = [angle, -1, -1, -1, -1];
-        setCustomParams(params);
-    }
-
-    // set the angle for calculating Maghrib
-    function setMaghribAngle(angle) {
-        var params = [-1, 0, angle, -1, -1];
-        setCustomParams(params);
-
-    }
-
-    // set the angle for calculating Isha
-    function setIshaAngle(angle) {
-        var params = [-1, -1, -1, 0, angle];
-        setCustomParams(params);
-
-    }
-
-    // set the minutes after Sunset for calculating Maghrib
-    function setMaghribMinutes(minutes) {
-        var params = [-1, 1, minutes, -1, -1];
-        setCustomParams(params);
-
-    }
-
-    // set the minutes after Maghrib for calculating Isha
-    function setIshaMinutes(minutes) {
-        var params = [-1, -1, -1, 1, minutes];
-        setCustomParams(params);
-
+        setCalcMethod(M_CUSTOM);
     }
 
 	function getDatesFromTimes(calendar, times) {
@@ -422,18 +311,18 @@ module IslamicCalendarModule {
     hidden function computeTimes(times) {
         var t = dayPortion(times);
         var Fajr = computeTime(
-                180 - methodParams[getCalcMethod()][0], t[0]);
+                180 - methodParams[calcMethod][0], t[0]);
 
         var Sunrise = computeTime(180 - 0.833d, t[1]);
 
         var Dhuhr = computeMidDay(t[2]);
-        var Asr = computeAsr(1 + getAsrJuristic(), t[3]);
+        var Asr = computeAsr(1 + asrJuristic, t[3]);
         var Sunset = computeTime(0.833d, t[4]);
 
         var Maghrib = computeTime(
-                methodParams[getCalcMethod()][2], t[5]);
+                methodParams[calcMethod][2], t[5]);
         var Isha = computeTime(
-                methodParams[getCalcMethod()][4], t[6]);
+                methodParams[calcMethod][4], t[6]);
 
         var CTimes = [Fajr, Sunrise, Dhuhr, Asr, Sunset, Maghrib, Isha];
         return CTimes;
@@ -444,7 +333,7 @@ module IslamicCalendarModule {
     hidden function computeDayTimes() {
         var times = [5d, 6d, 12d, 13d, 18d, 18d, 18d]; // default times
 
-        for (var i = 1; i <= getNumIterations(); i++) {
+        for (var i = 1; i <= numIterations; i++) {
             times = computeTimes(times);
         }
 
@@ -456,19 +345,19 @@ module IslamicCalendarModule {
     // adjust times in a prayer time array
     hidden function adjustTimes(times) {
         for (var i = 0; i < times.size(); i++) {
-            times[i] += getTimeZone() - getLng() / 15d;
+            times[i] += timeZone - lng / 15d;
         }
-        times[2] += getDhuhrMinutes() / 60d; // Dhuhr
-        if (methodParams[getCalcMethod()][1] == 1) // Maghrib
+        times[2] += dhuhrMinutes / 60d; // Dhuhr
+        if (methodParams[calcMethod][1] == 1) // Maghrib
         {
-            times[5] = times[4] + methodParams[getCalcMethod()][2]/ 60d;
+            times[5] = times[4] + methodParams[calcMethod][2]/ 60d;
         }
-        if (methodParams[getCalcMethod()][3] == 1) // Isha
+        if (methodParams[calcMethod][3] == 1) // Isha
         {
-            times[6] = times[5] + methodParams[getCalcMethod()][4]/ 60d;
+            times[6] = times[5] + methodParams[calcMethod][4]/ 60d;
         }
 
-        if (getAdjustHighLats() != getNone()) {
+        if (adjustHighLats != HL_NONE) {
             times = adjustHighLatTimes(times);
         }
 
@@ -479,21 +368,21 @@ module IslamicCalendarModule {
     hidden function adjustHighLatTimes(times) {
         var nightTime = timeDiff(times[4], times[1]); // sunset to sunrise
         // Adjust Fajr
-        var FajrDiff = nightPortion(methodParams[getCalcMethod()][0]) * nightTime;
+        var FajrDiff = nightPortion(methodParams[calcMethod][0]) * nightTime;
 
         if (checkForNaN(times[0]) || timeDiff(times[0], times[1]) > FajrDiff) {
             times[0] = times[1] - FajrDiff;
         }
 
         // Adjust Isha
-        var IshaAngle = (methodParams[getCalcMethod()][3] == 0) ? methodParams[getCalcMethod()][4] : 18d;
+        var IshaAngle = (methodParams[calcMethod][3] == 0) ? methodParams[calcMethod][4] : 18d;
         var IshaDiff = nightPortion(IshaAngle) * nightTime;
         if (checkForNaN(times[6]) || timeDiff(times[4], times[6]) > IshaDiff) {
             times[6] = times[4] + IshaDiff;
         }
 
         // Adjust Maghrib
-        var MaghribAngle = (methodParams[getCalcMethod()][1] == 0) ? methodParams[getCalcMethod()][2] : 4d;
+        var MaghribAngle = (methodParams[calcMethod][1] == 0) ? methodParams[calcMethod][2] : 4d;
         var MaghribDiff = nightPortion(MaghribAngle) * nightTime;
         if (checkForNaN(times[5]) || timeDiff(times[4], times[5]) > MaghribDiff) {
             times[5] = times[4] + MaghribDiff;
@@ -510,11 +399,11 @@ module IslamicCalendarModule {
     hidden function nightPortion(angle) {
 	    var calc = 0d;
 	
-		if (adjustHighLats == AngleBased) {
+		if (adjustHighLats == HL_ANGLE60TH) {
 			calc = (angle)/60.0d;
-		} else if (adjustHighLats == MidNight) {
+		} else if (adjustHighLats == HL_MIDNIGHT) {
 			calc = 0.5d;
-		} else if (adjustHighLats == OneSeventh) {
+		} else if (adjustHighLats == HL_MIDNIGHT) {
 			calc = 0.14286d;
 		}
 	
@@ -550,224 +439,16 @@ module IslamicCalendarModule {
         return times;
     }
 
-    function getCalcMethod() {
-        return calcMethod;
-    }
-
     function setCalcMethod(localcalcMethod) {
         calcMethod = localcalcMethod;
-    }
-
-    function getAsrJuristic() {
-        return asrJuristic;
     }
 
     function setAsrJuristic(localasrJuristic) {
         asrJuristic = localasrJuristic;
     }
 
-    function getDhuhrMinutes() {
-        return dhuhrMinutes;
-    }
-
-    function setDhuhrMinutes(localdhuhrMinutes) {
-        dhuhrMinutes = localdhuhrMinutes;
-    }
-
-    function getAdjustHighLats() {
-        return adjustHighLats;
-    }
-
     function setAdjustHighLats(localadjustHighLats) {
         adjustHighLats = localadjustHighLats;
-    }
-
-    function getLat() {
-        return lat;
-    }
-
-    function setLat(locallat) {
-        lat = locallat;
-    }
-
-    function getLng() {
-        return lng;
-    }
-
-    function setLng(locallng) {
-        lng = locallng;
-    }
-
-    function getTimeZone() {
-        return timeZone;
-    }
-
-    function setTimeZone(localtimeZone) {
-        timeZone = localtimeZone;
-    }
-
-    function getJDate() {
-        return JDate;
-    }
-
-    function setJDate(localjDate) {
-        JDate = localjDate;
-    }
-
-    function getJafari() {
-        return Jafari;
-    }
-
-    function setJafari(localjafari) {
-        Jafari = localjafari;
-    }
-
-    function getKarachi() {
-        return Karachi;
-    }
-
-    function setKarachi(localkarachi) {
-        Karachi = localkarachi;
-    }
-
-    function getISNA() {
-        return ISNA;
-    }
-
-    function setISNA(localiSNA) {
-        ISNA = localiSNA;
-    }
-
-    function getMWL() {
-        return MWL;
-    }
-
-    function setMWL(localmWL) {
-        MWL = localmWL;
-    }
-
-    function getMakkah() {
-        return Makkah;
-    }
-
-    function setMakkah(localmakkah) {
-        Makkah = localmakkah;
-    }
-
-    function getEgypt() {
-        return Egypt;
-    }
-
-    function setEgypt(localegypt) {
-        Egypt = localegypt;
-    }
-
-    function getCustom() {
-        return Custom;
-    }
-
-    function setCustom(localcustom) {
-        Custom = localcustom;
-    }
-
-    function getTehran() {
-        return Tehran;
-    }
-
-    function setTehran(localtehran) {
-        Tehran = localtehran;
-    }
-
-    function getShafii() {
-        return Shafii;
-    }
-
-    function setShafii(localshafii) {
-        Shafii = localshafii;
-    }
-
-    function getHanafi() {
-        return Hanafi;
-    }
-
-    function setHanafi(localhanafi) {
-        Hanafi = localhanafi;
-    }
-
-    function getNone() {
-        return None;
-    }
-
-    function setNone(localnone) {
-        None = localnone;
-    }
-
-    function getMidNight() {
-        return MidNight;
-    }
-
-    function setMidNight(localmidNight) {
-        MidNight = localmidNight;
-    }
-
-    function getOneSeventh() {
-        return OneSeventh;
-    }
-
-    function setOneSeventh(localoneSeventh) {
-        OneSeventh = localoneSeventh;
-    }
-
-    function getAngleBased() {
-        return AngleBased;
-    }
-
-    function setAngleBased(localangleBased) {
-        AngleBased = localangleBased;
-    }
-
-    hidden function getTime24() {
-        return Time24;
-    }
-
-    hidden function setTime24(localtime24) {
-        Time24 = localtime24;
-    }
-
-    function getTime12() {
-        return Time12;
-    }
-
-    hidden function setTime12(localtime12) {
-        Time12 = localtime12;
-    }
-
-    function getTime12NS() {
-        return Time12NS;
-    }
-
-    hidden function setTime12NS(localtime12ns) {
-        Time12NS = localtime12ns;
-    }
-
-    hidden function getFloating() {
-        return Floating;
-    }
-
-    hidden function setFloating(localfloating) {
-        Floating = localfloating;
-    }
-
-    hidden function getNumIterations() {
-        return numIterations;
-    }
-
-    hidden function setNumIterations(localnumIterations) {
-        numIterations = localnumIterations;
-    }
-
-    function getTimeNames() {
-        return timeNames;
     }
 }
 }

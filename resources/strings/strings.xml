@@ -16,6 +16,16 @@
     <string id="setting_method">Prayer Method</string>
     <string id="setting_juristic">Juristic Method</string>
     <string id="setting_latitude">Latitude Compensation</string>
+    <string id="setting_fajrAngle">Custom Fajr Angle</string>
+    <string id="prompt_fajrAngle">Fajr angle used for custom method</string>
+    <string id="setting_mahribAngle">Custom Mahrib Angle</string>
+    <string id="prompt_mahribAngle">Mahrib angle used for custom method</string>
+    <string id="setting_mahribMinutes">Custom Mahrib Minutes</string>
+    <string id="prompt_mahribMinutes">Mahrib minutes after sunset for custom method, overrules mahrib angle</string>
+    <string id="setting_ishaAngle">Custom Isha Angle</string>
+    <string id="prompt_ishaAngle">Isha angle used for custom method</string>
+    <string id="setting_ishaMinutes">Custom Isha Minutes</string>
+    <string id="prompt_ishaMinutes">Iasha minutes after mahrib for custom method, overules isha angle</string>
 
     <string id="method_jafari">Ithna Ashari</string>
     <string id="method_karachi">University of Islamic Sciences, Karachi</string>
@@ -23,9 +33,8 @@
     <string id="method_mwl">Muslim World League (MWL)</string>
     <string id="method_makkah">Umm al-Qura, Makkah</string>
     <string id="method_egypt">Egyptian General Authority of Survery</string>
-    <string
-        id="method_tehran"
-    >Insititue of Geophysics, University of Tehran</string>
+    <string id="method_tehran">Insititue of Geophysics, University of Tehran</string>
+    <string id="method_custom">Custom Definition</string>
 
     <string id="juristic_shafii">Safii</string>
     <string id="juristic_hanafi">Hanafi</string>

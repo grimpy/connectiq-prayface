@@ -2,4 +2,9 @@
     <property id="calculationMethod" type="number">5</property>
     <property id="juristicMethod" type="number">0</property>
     <property id="latitudeMethod" type="number">0</property>
+    <property id="fajrAngle" type="float">0</property>
+    <property id="mahribAngle" type="float">0</property>
+    <property id="mahribMinutes" type="number">0</property>
+    <property id="ishaAngle" type="float">0</property>
+    <property id="ishaMinutes" type="number">0</property>
 </properties>

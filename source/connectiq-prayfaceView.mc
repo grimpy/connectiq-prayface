@@ -40,11 +40,32 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
     function updateTimes() {
         // set settings
         var method = Application.Properties.getValue("calculationMethod");
-        calculator.setCalcMethod(method);
         var juristic = Application.Properties.getValue("juristicMethod");
-        calculator.setAsrJuristic(juristic);
         var latitude_method = Application.Properties.getValue("latitudeMethod");
+        calculator.setCalcMethod(method);
+        calculator.setAsrJuristic(juristic);
         calculator.setAdjustHighLats(latitude_method);
+        if (method == IslamicCalendarModule.M_CUSTOM) {
+            var fajrAngle = Application.Properties.getValue("fajrAngle");
+            var mahribAngle = Application.Properties.getValue("ishaAngle");
+            var mahribMinutes = Application.Properties.getValue("mahribMinutes");
+            var mahribValue = mahribAngle;
+            var mahribMethod = 0;
+            if (mahribMinutes != 0) {
+                mahribMethod = 1;
+                mahribValue = mahribMinutes;
+            }
+            var ishaAngle = Application.Properties.getValue("ishaAngle");
+            var ishaMinutes = Application.Properties.getValue("ishaMinutes");
+            var ishaValue = ishaAngle;
+            var ishaMethod = 0;
+            if (ishaMinutes != 0) {
+                ishaMethod = 1;
+                ishaValue = ishaMinutes;
+            }
+            calculator.setCustomParams([fajrAngle, mahribMethod, mahribValue, ishaMethod, ishaValue]);
+
+        }
         System.println("Method: " + method + " Jursitic: " + juristic + " Adjust: " + latitude_method);
 
         // set posititions
@@ -150,6 +171,8 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
         // Set DND
         if (devsettings.doNotDisturb) {
             statusView.setText("Zzz"); 
+        } else {
+            statusView.setText(""); 
         }
         // Update batery text
         batteryView.setText(stats.battery.format("%02d") + "%");
@@ -157,6 +180,7 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
         var prayername = "Unknown";
         var prayerstart = 0;
         var prayerend = 1;
+
         for (var i = 1; i < times.size(); i++){
             if (times[i-1] < floatTime and times[i] > floatTime) {
                 prayername = names[i - 1];

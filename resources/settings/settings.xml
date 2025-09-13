@@ -8,6 +8,8 @@
             <listEntry value="3">@Strings.method_mwl</listEntry>
             <listEntry value="4">@Strings.method_makkah</listEntry>
             <listEntry value="5">@Strings.method_egypt</listEntry>
+            <listEntry value="6">@Strings.method_tehran</listEntry>
+            <listEntry value="7">@Strings.method_custom</listEntry>
         </settingConfig>
     </setting>
 
@@ -25,6 +27,21 @@
             <listEntry value="2">@Strings.latitude_oneseventh</listEntry>
             <listEntry value="3">@Strings.latitude_anglebased</listEntry>
         </settingConfig>
+    </setting>
+     <setting propertyKey="@Properties.fajrAngle" title="@Strings.setting_fajrAngle" prompt="@Strings.prompt_fajrAngle">
+        <settingConfig type="numeric"/>
+    </setting>
+     <setting propertyKey="@Properties.mahribAngle" title="@Strings.setting_mahribAngle" prompt="@Strings.prompt_mahribAngle">
+        <settingConfig type="numeric"/>
+    </setting>
+     <setting propertyKey="@Properties.mahribMinutes" title="@Strings.setting_mahribMinutes" prompt="@Strings.prompt_mahribMinutes">
+        <settingConfig type="numeric"/>
+    </setting>
+     <setting propertyKey="@Properties.ishaAngle" title="@Strings.setting_ishaAngle" prompt="@Strings.prompt_ishaAngle">
+        <settingConfig type="numeric"/>
+    </setting>
+     <setting propertyKey="@Properties.ishaMinutes" title="@Strings.setting_ishaMinutes" prompt="@Strings.prompt_ishaMinutes">
+        <settingConfig type="numeric"/>
     </setting>
 
 </settings>

@@ -18,6 +18,7 @@
         <menu-item id="item_method_makkah" label="@Strings.method_makkah" />
         <menu-item id="item_method_egypt" label="@Strings.method_egypt" />
         <menu-item id="item_method_tehran" label="@Strings.method_tehran" />
+        <menu-item id="item_method_custom" label="@Strings.method_custom" />
     </menu2>
     <menu2 id="JuristicMenu" title="Juristic">
         <menu-item id="item_juristic_shafii" label="@Strings.juristic_shafii" />
