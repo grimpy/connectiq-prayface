@@ -4,6 +4,7 @@ import Toybox.Lang;
 import Toybox.System;
 import Toybox.Position;
 import Toybox.Time;
+import Toybox.Math;
 import Toybox.WatchUi;
 import Toybox.Activity;
 import IslamicCalendarModule;
@@ -69,11 +70,14 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
         System.println("Method: " + method + " Jursitic: " + juristic + " Adjust: " + latitude_method);
 
         // set posititions
-        var position = Position.getInfo().position;
-        var coordinates = position.toDegrees();
-        System.println("Long: " + coordinates[0] + " Lan: " + coordinates[1]);
-        if (!is_null_location(coordinates)) {
-            location = coordinates;
+        var positionInfo = Position.getInfo();
+        if (positionInfo != null and positionInfo.position != null) {
+            var position = positionInfo.position;
+            var coordinates = position.toDegrees();
+            System.println("Long: " + coordinates[0] + " Lan: " + coordinates[1]);
+            if (!is_null_location(coordinates)) {
+                location = coordinates;
+            }
         }
         var clock = System.getClockTime();
         var hoursDiff = (clock.timeZoneOffset) / 3600d;
@@ -93,11 +97,9 @@ class connectiqprayfaceView extends WatchUi.WatchFace {
     }
 
     function is_null_location(location) {
-        if (location[0] == 0 and location[1] == 0){
-            return true;
-        } else if (location[0] == 180 and location[1] == 180){
-            return true;
-        } else if (location[0] == -180 and location[1] == -180){
+        var long = Math.round(location[0]);
+        var lang = Math.round(location[1]);
+        if (long == 180 and lang == 180){
             return true;
         }
         return false;
